@@ -13,7 +13,7 @@ def connect_db(app):
 class User(db.Model):
     '''User.'''
 
-    __tablename__ = "user"
+    __tablename__ = "users"
 
     id = db.Column(db.Integer,
                    primary_key=True,
@@ -22,7 +22,8 @@ class User(db.Model):
                            nullable=False)
     last_name = db.Column(db.String(30),
                           nullable=False)
-    image_url = db.Column(Text,
+    image_url = db.Column(db.Text,
                           nullable=True,
                           default="https://anthonycarbonepersonalinjurylawyer.com/wp-content/uploads/2018/06/shutterstock_126920099.jpg")
+
 
