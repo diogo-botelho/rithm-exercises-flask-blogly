@@ -1,20 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %} Create a user {% endblock %}
+{% block title %} User details {% endblock %}
 
 {% block content %}
 
-<h1>Edit a user</h1>
-<form action="/users" name="add-new-user" method="POST">
-    <label for="first-name">First Name</label>
-    <input type="text" name="first-name" value="{{ user.first_name }}" required>
-    <label for="last-name">Last Name</label>
-    <input type="text" name="last-name" value="{{ user.last_name }}" required>
-    <label for="image-url">Image URL</label>
-    <input type="url" name="image-url" value="{{ user.image_url }}">
-    <button>Cancel</button>
-    <button>Save</button>
-</form>
+<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+<img src="{{ user.image_url }}" alt="Profile picture">
+<button class="user-edit">Edit</button>
+<button class="user-delete">Delete</button>
 
 {% endblock %}
-
