@@ -2,13 +2,16 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 def connect_db(app):
     '''Connect to database.'''
 
     db.app = app
     db.init_app(app)
 
+
 """Models for Blogly."""
+
 
 class User(db.Model):
     '''User.'''
@@ -26,5 +29,22 @@ class User(db.Model):
                           nullable=True,
                           default="https://anthonycarbonepersonalinjurylawyer.com/wp-content/uploads/2018/06/shutterstock_126920099.jpg")
 
-  
 
+class Post(db.Model):
+    '''Post.'''
+
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, 
+                    primary_key=True, 
+                    autoincrement=True)
+    title = db.Column(db.String(100), 
+                        nullable=False)
+    content = db.Column(db.Text, 
+                        nullable=False)
+    created_at = db.Column(db.DateTime, 
+                            nullable=False)
+    user_id = db.ForeignKey("users.id", 
+                            nullable=False)  
+
+    user = db.relationship('User', backref='posts')

@@ -19,8 +19,8 @@
         <input type="url" name="image-url" value="{{ user.image_url }}">
     </div>
     <div>
-        <button class="cancel-edit" formaction="/users" formmethod="get">Cancel</button>
-        <button class="save-edit" formaction="/users/{{ user.id }}/edit" formmethod="post">Save</button>
+        <button class="cancel" formaction="/users" formmethod="get">Cancel</button>
+        <button class="save" formaction="/users/{{ user.id }}/edit" formmethod="post">Save</button>
     </div>
 </form>
 
