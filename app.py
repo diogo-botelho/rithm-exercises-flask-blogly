@@ -42,23 +42,62 @@ def show_new_user_form():
 @app.post("/users/new")
 def add_user():
     """Add new user"""
-    breakpoint()
-    response = request.form
-    breakpoint()
+
     first_name = request.form["first-name"]
     last_name = request.form["last-name"]
     image_url = request.form["image-url"]
 
-    breakpoint()
     new_user = User(first_name=first_name,last_name=last_name,image_url=image_url)
-    breakpoint()
+    
     db.session.add(new_user)
     db.session.commit()
-    breakpoint()
+    
     return redirect("/users")
 
-@app.get("/users/[user-id]")
-def show_user_details():
+@app.get("/users/<int:user_id>")
+def show_user_details(user_id):
     """Show details for selected user"""
 
-    return render_template("/user-detail.html")
+    user = User.query.get(user_id)
+
+    return render_template("/user-detail.html", user=user )
+
+@app.get("/users/<int:user_id>/edit")
+def show_user_edit_form(user_id):
+    """Show the edit page for a user"""
+
+    user = User.query.get(user_id)
+
+    return render_template("edit-user.html", user=user)
+
+@app.post("/users/<int:user_id>/edit")
+def update_user(user_id):
+    """Process the edit form, returning the user to the /users page."""
+    
+    first_name = request.form["first-name"]
+    last_name = request.form["last-name"]
+    image_url = request.form["image-url"]
+
+    edited_user = User.query.get(user_id)
+
+    edited_user.first_name = first_name
+    edited_user.last_name = last_name
+    edited_user.image_url = image_url
+
+    db.session.commit()
+
+    return redirect("/users")
+
+@app.post("/users/<int:user_id>/delete")
+def delete_user(user_id):
+    """Delete the user."""
+
+    user = User.query.get(user_id)
+    breakpoint()
+    db.session.delete(user)
+    breakpoint()
+    db.session.commit()
+    breakpoint()
+
+    return redirect("/users")
+

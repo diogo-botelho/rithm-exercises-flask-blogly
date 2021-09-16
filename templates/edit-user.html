@@ -5,7 +5,7 @@
 {% block content %}
 
 <h1>Edit a user</h1>
-<form action="#" name="add-new-user" method="post">
+<form name="add-new-user">
     <div>
         <label for="first-name">First Name</label>
         <input type="text" name="first-name" value="{{ user.first_name }}" required>
@@ -19,8 +19,8 @@
         <input type="url" name="image-url" value="{{ user.image_url }}">
     </div>
     <div>
-        <button>Cancel</button>
-        <button>Save</button>
+        <button class="cancel-edit" formaction="/users" formmethod="get">Cancel</button>
+        <button class="save-edit" formaction="/users/{{ user.id }}/edit" formmethod="post">Save</button>
     </div>
 </form>
 

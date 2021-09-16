@@ -6,7 +6,9 @@
 
 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
 <img src="{{ user.image_url }}" alt="Profile picture">
-<button class="user-edit">Edit</button>
-<button class="user-delete">Delete</button>
+<form class="edit-and-save">
+    <button class="user-edit" formaction="/users/{{ user.id }}/edit">Edit</button>
+    <button name="user-delete" class="user-delete"  formmethod="post" formaction="/users/{{ user.id }}/delete">Delete</button>
+</form>
 
 {% endblock %}

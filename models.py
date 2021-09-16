@@ -26,4 +26,5 @@ class User(db.Model):
                           nullable=True,
                           default="https://anthonycarbonepersonalinjurylawyer.com/wp-content/uploads/2018/06/shutterstock_126920099.jpg")
 
+  
 
