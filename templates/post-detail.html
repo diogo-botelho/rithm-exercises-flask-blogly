@@ -4,18 +4,22 @@
 
 {% block content %}
 
+{% for msg in get_flashed_messages() %}
+    <p>{{ msg }}</p>
+{% endfor %}
+
 <h1>{{ post.title }}</h1>
  <div>
     <p> {{ post.content }} </p>
 </div>
 <div> 
-    <i> By {{ user.first-name }} {{ user.last-name }} </i>
+    <i> By {{ user.first_name }} {{ user.last_name }} </i>
 </div>
 
 <form>
-    <button class="cancel" formaction="" formmethod="get">Cancel</button>
-    <button class="edit" formaction="">Edit</button>
-    <button name="post-delete" class="delete"  formmethod="post" formaction="">Delete</button>
+    <button class="cancel" formaction="/users/{{ user.id }}" formmethod="get">Cancel</button>
+    <button class="edit" formaction="/posts/{{ post.id }}/edit">Edit</button>
+    <button name="post-delete" class="delete"  formmethod="post" formaction="/posts/{{ post.id }}/delete">Delete</button>
 </form>
 
 {% endblock %}

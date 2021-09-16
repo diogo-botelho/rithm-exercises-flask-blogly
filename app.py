@@ -66,7 +66,12 @@ def show_user_details(user_id):
 
     user = User.query.get_or_404(user_id) #Code Review: .get returns the page with all the values as "None" but still showing the template HTML. Also one click away from a bug if users try to delete the non-existing user
 
-    return render_template("/user-detail.html", user=user )
+    posts = user.posts
+
+    return render_template(
+                            "/user-detail.html",
+                            user= user,
+                            posts= posts)
 
 @app.get("/users/<int:user_id>/edit")
 def show_user_edit_form(user_id):
@@ -82,17 +87,13 @@ def edit_user(user_id):
 
     edited_user = User.query.get_or_404(user_id) #Code Review
 
-    first_name = request.form["first-name"]
-    last_name = request.form["last-name"]
-    image_url = request.form["image-url"]
-
-    edited_user.first_name = first_name
-    edited_user.last_name = last_name
-    edited_user.image_url = image_url
+    edited_user.first_name = request.form["first-name"]
+    edited_user.last_name = request.form["last-name"]
+    edited_user.image_url = request.form["image-url"]
 
     db.session.commit()
 
-    flash(f"User details successfully edited.")
+    flash("User details successfully edited.")
 
     return redirect("/users")
 
@@ -104,7 +105,7 @@ def delete_user(user_id):
     db.session.delete(user) #user.query.get.delete also a good alternative
     db.session.commit()
 
-    flash(f"User successfully deleted.")
+    flash("User successfully deleted.")
 
     return redirect("/users")
 
@@ -128,6 +129,62 @@ def add_post(user_id):
     db.session.add(new_post)
     db.session.commit()
 
-    return redirect("/users/<int:user_id>")
+    flash(f"'{new_post.title}' was successfully added.")
+    
+    return redirect(f"/users/{user_id}")
 
+@app.get("/posts/<int:post_id>")
+def show_post(post_id):
+    """Show post."""
 
+    post = Post.query.get_or_404(post_id)
+    
+    user = post.user
+
+    return render_template(
+                            "post-detail.html",
+                            post = post,
+                            user = user
+                            )
+
+@app.get("/posts/<int:post_id>/edit")
+def show_edit_post_form(post_id):
+    """Show form to edit post."""
+
+    post = Post.query.get_or_404(post_id)
+
+    user = post.user
+
+    return render_template(
+                            "edit-post.html",
+                            post = post,
+                            user = user
+                            )
+
+@app.post("/posts/<int:post_id>/edit")
+def edit_post(post_id):
+    """Edit post."""
+
+    edited_post = Post.query.get_or_404(post_id) #Code Review
+
+    edited_post.title = request.form["title"]
+    edited_post.content = request.form["content"]
+
+    db.session.commit()
+
+    flash("Post successfully edited.")
+
+    return redirect(f"/posts/{post_id}")
+
+@app.post("/posts/<int:post_id>/delete")
+def delete_post(post_id):
+    """Delete post."""
+
+    post = Post.query.get(post_id)
+    user = post.user
+    db.session.delete(post)
+    db.session.commit()
+
+    flash("Post successfully deleted.")
+
+    return redirect(f"/users/{user.id}")

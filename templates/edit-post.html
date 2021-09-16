@@ -15,8 +15,8 @@
         <input type="text" name="content" value="{{ post.content }}" id="content" required>
     </div>
     <div>
-        <button class="cancel" formaction="/" formmethod="get">Cancel</button>
-        <button class="edit" formaction="" formmethod="post">Edit</button>
+        <button class="cancel" formaction="/posts/{{ post.id }}" formmethod="get">Cancel</button>
+        <button class="edit" formaction="/posts/{{ post.id }}/edit" formmethod="post">Edit</button>
     </div>
 </form>
 
