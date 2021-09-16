@@ -1,6 +1,6 @@
 """Blogly application."""
 
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, flash
 from models import db, connect_db, User
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -45,12 +45,18 @@ def add_user():
 
     first_name = request.form["first-name"]
     last_name = request.form["last-name"]
-    image_url = request.form["image-url"]
+    image_url = request.form["image-url"] or None #Code review: Without the "or None" it was passing an empty string and the model needs a Null to put the template image
 
-    new_user = User(first_name=first_name,last_name=last_name,image_url=image_url)
+    new_user = User(
+                    first_name=first_name,
+                    last_name=last_name,
+                    image_url=image_url
+                    )
     
     db.session.add(new_user)
     db.session.commit()
+
+    flash(f"User {first_name} {last_name} successfully added.")
     
     return redirect("/users")
 
@@ -58,7 +64,7 @@ def add_user():
 def show_user_details(user_id):
     """Show details for selected user"""
 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id) #Code Review: .get returns the page with all the values as "None" but still showing the template HTML. Also one click away from a bug if users try to delete the non-existing user
 
     return render_template("/user-detail.html", user=user )
 
@@ -71,20 +77,22 @@ def show_user_edit_form(user_id):
     return render_template("edit-user.html", user=user)
 
 @app.post("/users/<int:user_id>/edit")
-def update_user(user_id):
+def edit_user(user_id):
     """Process the edit form, returning the user to the /users page."""
-    
+
+    edited_user = User.query.get_or_404(user_id) #Code Review
+
     first_name = request.form["first-name"]
     last_name = request.form["last-name"]
     image_url = request.form["image-url"]
-
-    edited_user = User.query.get(user_id)
 
     edited_user.first_name = first_name
     edited_user.last_name = last_name
     edited_user.image_url = image_url
 
     db.session.commit()
+
+    flash(f"User details successfully edited.")
 
     return redirect("/users")
 
@@ -93,11 +101,10 @@ def delete_user(user_id):
     """Delete the user."""
 
     user = User.query.get(user_id)
-    breakpoint()
-    db.session.delete(user)
-    breakpoint()
+    db.session.delete(user) #user.query.get.delete also a good alternative
     db.session.commit()
-    breakpoint()
+
+    flash(f"User successfully deleted.")
 
     return redirect("/users")
 
