@@ -12,7 +12,12 @@
 <img src="{{ user.image_url }}" alt="Profile picture">
 <form class="edit-and-save">
     <button class="user-edit" formaction="/users/{{ user.id }}/edit">Edit</button>
-    <button name="user-delete" class="user-delete"  formmethod="post" formaction="/users/{{ user.id }}/delete">Delete</button>
+    <button 
+        name="user-delete" 
+        class="user-delete"  
+        formmethod="post" 
+        formaction="/users/{{ user.id }}/delete"
+    >Delete</button>
 </form>
 
 <h1>Posts</h1>
@@ -25,7 +30,10 @@
     {% endfor %}
 </ul>
     <form>
-        <button formaction="/users/{{ user.id }}/posts/new" formmethod="GET">Add Post</button>
+        <button 
+            formaction="/users/{{ user.id }}/posts/new" 
+            formmethod="GET"
+        >Add Post</button>
     </form>
 
 {% endblock %}

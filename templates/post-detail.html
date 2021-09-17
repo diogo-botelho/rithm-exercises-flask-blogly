@@ -13,13 +13,22 @@
     <p> {{ post.content }} </p>
 </div>
 <div> 
-    <i> By {{ user.first_name }} {{ user.last_name }} </i>
+    <i> By {{ post.user.first_name }} {{ post.user.last_name }} </i>
 </div>
 
 <form>
-    <button class="cancel" formaction="/users/{{ user.id }}" formmethod="get">Cancel</button>
+    <button 
+        class="cancel" 
+        formaction="/users/{{ post.user.id }}" 
+        formmethod="get"
+    >Cancel</button>
     <button class="edit" formaction="/posts/{{ post.id }}/edit">Edit</button>
-    <button name="post-delete" class="delete"  formmethod="post" formaction="/posts/{{ post.id }}/delete">Delete</button>
+    <button 
+        name="post-delete" 
+        class="delete"  
+        formmethod="post" 
+        formaction="/posts/{{ post.id }}/delete"
+    >Delete</button>
 </form>
 
 {% endblock %}
